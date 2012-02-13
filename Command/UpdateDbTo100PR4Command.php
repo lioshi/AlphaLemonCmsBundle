@@ -23,17 +23,28 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
-
+/*
 use AlphaLemon\ThemeEngineBundle\Core\ThemeManager\AlThemeManager;
 use AlphaLemon\AlphaLemonCmsBundle\Core\Content\Language\AlLanguageManager;
 use AlphaLemon\AlphaLemonCmsBundle\Core\Content\Page\AlPageManager;
+*/
+
+use AlphaLemon\AlphaLemonCmsBundle\Model\AlContent;
+use AlphaLemon\AlphaLemonCmsBundle\Model\AlContentQuery;
+use AlphaLemon\AlphaLemonCmsBundle\Model\AlLanguageQuery;
+use AlphaLemon\AlphaLemonCmsBundle\Model\AlPageQuery;
+use AlphaLemon\AlphaLemonCmsBundle\Model\AlPageAttributeQuery;
+use AlphaLemon\PageTreeBundle\Core\Tools\AlToolkit;
+
+use AlphaLemon\AlphaLemonCmsBundle\Model\AlContentVersion;
+
 
 /**
  * Populates the database after a fresh install
  *
  * @author AlphaLemon <info@alphalemon.com>
  */
-class PopulateCommand extends ContainerAwareCommand
+class UpdateDbTo100PR4Command extends ContainerAwareCommand
 {
     /**
      * @see Command
@@ -47,7 +58,7 @@ class PopulateCommand extends ContainerAwareCommand
                 new InputOption('user', '', InputOption::VALUE_OPTIONAL, 'The database user', 'root'),
                 new InputOption('password', null, InputOption::VALUE_OPTIONAL, 'The database password', ''),
             ))
-            ->setName('alphalemon:populate');
+            ->setName('alphalemon:update-db-to-1.0.0.PR4');
     }
 
     /**
@@ -56,50 +67,152 @@ class PopulateCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        
         $connection = new \PropelPDO($input->getArgument('dsn'), $input->getOption('user'), $input->getOption('password'));
+        /*
+        $sqlFile = AlToolkit::locateResource($this->getContainer(), '@AlphaLemonCmsBundle/Resources/sql_update/1.0.0.PR4.sql');
+        $updateQueries = file_get_contents($sqlFile);
         
-        $queries = array('TRUNCATE al_content;',
-                         'TRUNCATE al_language;',
-                         'TRUNCATE al_page;',
-                         'TRUNCATE al_page_attribute;',
-                         'TRUNCATE al_theme;',
-                         'INSERT INTO al_language (language) VALUES(\'-\');',
-                         'INSERT INTO al_page (page_name) VALUES(\'-\');',
-                        );
-        
+        $queries = explode(';', $updateQueries);
         foreach($queries as $query)
         {
             $statement = $connection->prepare($query);
             $statement->execute();
         }
+        */
+        $connection->beginTransaction();
+        $this->deleteObjects(AlContentQuery::create()->filterByToDelete(1)->find());
+        $this->deleteObjects(AlLanguageQuery::create()->filterByToDelete(1)->find());
+        $this->deleteObjects(AlPageQuery::create()->filterByToDelete(1)->find());
+        $this->deleteObjects(AlPageAttributeQuery::create()->filterByToDelete(1)->find());
+        $connection->commit();
+        exit;
+        AlToolkit::executeCommand($this->getContainer()->get('kernel'), 'propel:build-model');
         
-        $themeName = "AlphaLemonThemeBundle";
-        $this->getContainer()->get('al_page_tree')->setThemeName($themeName);
         
-        $themeManager = new AlThemeManager($this->getContainer());
-        $themeManager->add(array('name' => $themeName, 'active' => 1));
-        
-        $languageManager = new AlLanguageManager($this->getContainer());
-        $languageManager->save(array('language' => 'en'));
-        
-        $pageManager = new AlPageManager($this->getContainer());
-        $pageManager->save(array('pageName' => 'index',
-                                 'template' => 'home',
-                                 'permalink' => 'homepage',
-                                 'title' => 'A website made with AlphaLemon CMS',
-                                 'description' => 'Website homepage',
-                                 'keywords' => '',
-                              ));
-        
-        $this->getContainer()->get('al_page_tree')->setup($languageManager->get(), $pageManager->get());
-        try
+        $alLanguages = AlLanguageQuery::create()->filterByToDelete(0)->find();
+        foreach($alLanguages as $alLanguage)
         {
-            $deployer = new \AlphaLemon\AlphaLemonCmsBundle\Core\Deploy\AlXmlDeployer($this->getContainer());
-            $deployer->deploy();
+            $values = $alLanguage->toArray();
+            $values["Version"] = 1;
+            
+            $objects = AlContentQuery::create()->filterByAlLanguage($alLanguage)->filterByToDelete(0)->find();
+            if(count($objects) > 0)
+            {
+                $foreignKeys = $this->retrieveForeignKeys($objects);
+                $values["AlContentIds"] = $foreignKeys['keys'];
+                $values["AlContentVersions"] = $foreignKeys['versions'];
+            }
+            
+            $objects = AlPageAttributeQuery::create()->filterByAlLanguage($alLanguage)->filterByToDelete(0)->find();
+            if(count($objects) > 0)
+            {
+                $foreignKeys = $this->retrieveForeignKeys($objects);
+                $values["AlPageAttributeIds"] = $foreignKeys['keys'];
+                $values["AlPageAttributeVersions"] = $foreignKeys['versions'];
+            }
+            
+            $version = new \AlphaLemon\AlphaLemonCmsBundle\Model\AlLanguageVersion();
+            $version->fromArray($values);
+            $version->save();
         }
-        catch(\Exception $ex)
+        
+        $alPages = AlPageQuery::create()->filterByToDelete(0)->find();
+        foreach($alPages as $alPage)
         {
-            echo $ex->getMessage();
+            $values = $alPage->toArray();
+            $values["Version"] = 1;
+            
+            $objects = AlContentQuery::create()->filterByAlPage($alPage)->filterByToDelete(0)->find();
+            if(count($objects) > 0)
+            {
+                $foreignKeys = $this->retrieveForeignKeys($objects);
+                $values["AlContentIds"] = $foreignKeys['keys'];
+                $values["AlContentVersions"] = $foreignKeys['versions'];
+            }
+            
+            $objects = AlPageAttributeQuery::create()->filterByAlPage($alPage)->filterByToDelete(0)->find();
+            if(count($objects) > 0)
+            {
+                $foreignKeys = $this->retrieveForeignKeys($objects);
+                $values["AlPageAttributeIds"] = $foreignKeys['keys'];
+                $values["AlPageAttributeVersions"] = $foreignKeys['versions'];
+            }
+            
+            $version = new \AlphaLemon\AlphaLemonCmsBundle\Model\AlPageVersion();
+            $version->fromArray($values);
+            $version->save();
+        }
+        
+        //$objects = AlPageQuery::create()->filterByToDelete(0)->find();
+        //$this->saveObjects($objects, '\AlphaLemon\AlphaLemonCmsBundle\Model\AlPageVersion');
+        
+        $objects = AlPageAttributeQuery::create()->filterByToDelete(0)->find();
+        $this->saveObjects($objects, '\AlphaLemon\AlphaLemonCmsBundle\Model\AlPageAttributeVersion', array('PageIdVersion' => '1', 'LanguageIdVersion' => '1'));
+        
+        $objects = AlContentQuery::create()->filterByToDelete(0)->find();
+        $this->saveObjects($objects, '\AlphaLemon\AlphaLemonCmsBundle\Model\AlContentVersion', array('PageIdVersion' => '1', 'LanguageIdVersion' => '1'));
+        
+        
+        
+        exit;
+        $newContent = new AlContent();
+        $values = $content->toArray();
+        unset($values['Id']);
+        unset($values['CreatedAt']);
+        $values['HtmlContent'] = "fake1";
+        $newContent->fromArray($values);
+        $newContent->save();
+        //$newContent->archive();
+        //$newContent->delete();
+        exit;
+        
+        $objects = AlContentQuery::create()->find();
+        $this->saveObjects($objects);
+        
+        $objects = AlLanguageQuery::create()->find();
+        $this->saveObjects($objects);
+        
+        $objects = AlPageQuery::create()->find();
+        $this->saveObjects($objects);
+        
+        $objects = AlPageAttributeQuery::create()->find();
+        $this->saveObjects($objects);
+    }
+    
+    private function retrieveForeignKeys($objects)
+    {
+        $ids = array();        
+        $versions = array(); 
+        foreach($objects as $object)
+        {
+            $ids[] = $object->getId();
+            $versions[] = 1;
+        }
+        
+        return array('keys' => $ids, 'versions' => $versions);
+        return array('keys' => '| ' . implode(' | ', $ids) . ' |', 'versions' => '| ' . implode(' | ', $versions) . ' |');
+    }
+    
+    private function saveObjects($objects, $class, array $versioning = array())
+    {
+        foreach($objects as $object)
+        {
+            $values = $object->toArray();
+            $values["Version"] = 1;
+            $values = array_merge($values, $versioning);
+            
+            $version = new $class();
+            $version->fromArray($values);
+            $version->save();
+        }
+    }
+    
+    private function deleteObjects($objects)
+    {
+        foreach($objects as $object)
+        {
+            $object->delete();
         }
     }
 }
