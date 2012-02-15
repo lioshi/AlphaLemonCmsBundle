@@ -1,0 +1,35 @@
+<div id="al_theme_fixer">
+
+  <div>
+    <div class="al_float_left" style="padding:4px;">Available templates</div>
+    <div class="al_float_left" style="padding:4px;">
+        <select>
+        {% for template in templates %}
+           <option value="{{ template }}">{{ template }}</option>
+        {% endfor %}
+        </select>
+    </div>
+    <div class="al_float_left" style="padding:4px;"><input type="submit" value="Change template" /></div>     
+    <div style="clear:left;"></div>
+  </div>    
+  
+  <div id="al_pages_to_fix_list">
+{% set i = 0 %}
+{% for page in pages %}
+    {% if (i % 2) == 0 %}
+        {% set class = 'row' %}
+    {% else %}
+        {% set class = 'alternate-row' %}
+    {% endif %}
+    <div class="{{ class }}">
+        <div class="al_float_left" style="padding:4px;"><input type="checkbox" /></div>
+        <div class="al_float_left" style="padding:4px;">{{ page.pageName }}</div>
+        <div class="al_float_left" style="padding:4px;">{{ page.templateName }}</div>     
+        <div style="clear:left;"></div>
+    </div>    
+    {% set i  = i + 1 %}
+{% endfor %}
+  </div>
+  
+  <div style="padding:4px;"><input type="submit" value="Activate" /></div>
+</div>
