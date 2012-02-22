@@ -67,10 +67,8 @@ class UpdateDbTo100PR4Command extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        
-        
         $connection = new \PropelPDO($input->getArgument('dsn'), $input->getOption('user'), $input->getOption('password'));
-        /*
+        /**/
         $sqlFile = AlToolkit::locateResource($this->getContainer(), '@AlphaLemonCmsBundle/Resources/sql_update/1.0.0.PR4.sql');
         $updateQueries = file_get_contents($sqlFile);
         
@@ -80,7 +78,7 @@ class UpdateDbTo100PR4Command extends ContainerAwareCommand
             $statement = $connection->prepare($query);
             $statement->execute();
         }
-        */
+        
         $connection->beginTransaction();
         $this->deleteObjects(AlContentQuery::create()->filterByToDelete(1)->find());
         $this->deleteObjects(AlLanguageQuery::create()->filterByToDelete(1)->find());
