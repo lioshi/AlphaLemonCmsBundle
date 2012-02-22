@@ -68,7 +68,7 @@ class UpdateDbTo100PR4Command extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $connection = new \PropelPDO($input->getArgument('dsn'), $input->getOption('user'), $input->getOption('password'));
-        /**/
+        
         $sqlFile = AlToolkit::locateResource($this->getContainer(), '@AlphaLemonCmsBundle/Resources/sql_update/1.0.0.PR4.sql');
         $updateQueries = file_get_contents($sqlFile);
         
@@ -87,7 +87,6 @@ class UpdateDbTo100PR4Command extends ContainerAwareCommand
         $connection->commit();
         
         AlToolkit::executeCommand($this->getContainer()->get('kernel'), 'propel:build-model');
-        
         
         $alLanguages = AlLanguageQuery::create()->filterByToDelete(0)->find();
         foreach($alLanguages as $alLanguage)
@@ -143,40 +142,20 @@ class UpdateDbTo100PR4Command extends ContainerAwareCommand
             $version->save();
         }
         
-        //$objects = AlPageQuery::create()->filterByToDelete(0)->find();
-        //$this->saveObjects($objects, '\AlphaLemon\AlphaLemonCmsBundle\Model\AlPageVersion');
-        
         $objects = AlPageAttributeQuery::create()->filterByToDelete(0)->find();
         $this->saveObjects($objects, '\AlphaLemon\AlphaLemonCmsBundle\Model\AlPageAttributeVersion', array('PageIdVersion' => '1', 'LanguageIdVersion' => '1'));
         
         $objects = AlContentQuery::create()->filterByToDelete(0)->find();
         $this->saveObjects($objects, '\AlphaLemon\AlphaLemonCmsBundle\Model\AlContentVersion', array('PageIdVersion' => '1', 'LanguageIdVersion' => '1'));
         
-        
-        
-        exit;
-        $newContent = new AlContent();
-        $values = $content->toArray();
-        unset($values['Id']);
-        unset($values['CreatedAt']);
-        $values['HtmlContent'] = "fake1";
-        $newContent->fromArray($values);
-        $newContent->save();
-        //$newContent->archive();
-        //$newContent->delete();
-        exit;
-        
-        $objects = AlContentQuery::create()->find();
-        $this->saveObjects($objects);
-        
-        $objects = AlLanguageQuery::create()->find();
-        $this->saveObjects($objects);
-        
-        $objects = AlPageQuery::create()->find();
-        $this->saveObjects($objects);
-        
-        $objects = AlPageAttributeQuery::create()->find();
-        $this->saveObjects($objects);
+        $statement = $connection->prepare('UPDATE al_content SET version = 1');
+        $statement->execute();
+        $statement = $connection->prepare('UPDATE al_page SET version = 1');
+        $statement->execute();
+        $statement = $connection->prepare('UPDATE al_page_attribute SET version = 1');
+        $statement->execute();
+        $statement = $connection->prepare('UPDATE al_language SET version = 1');
+        $statement->execute();
     }
     
     private function retrieveForeignKeys($objects)
@@ -204,6 +183,9 @@ class UpdateDbTo100PR4Command extends ContainerAwareCommand
             $version = new $class();
             $version->fromArray($values);
             $version->save();
+            
+            //$object->setVersion(1);
+            //$object->save();
         }
     }
     
