@@ -58,11 +58,11 @@ var isEditorOpened = false;
         var editorWidth = editableData.editorWidth;
         $.ajax({
             type: 'POST',
-            url: frontController + 'backend/' + $('#al_available_languages').val() + '/al_showBlocksEditor',
-            data: {'page' :  $('#al_pages_navigator option:selected').text(),
-                   'language' : $('#al_languages_navigator option:selected').text(),
-                   'pageId' :  $('#al_pages_navigator option:selected').val(),
-                   'languageId' : $('#al_languages_navigator option:selected').val(),
+            url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/al_showBlocksEditor',
+            data: {'page' :  $('#al_pages_navigator').html(),
+                   'language' : $('#al_languages_navigator').html(),
+                   'pageId' :  $('#al_pages_navigator').attr('rel'),
+                   'languageId' : $('#al_languages_navigator').attr('rel'),
                    'idBlock' : idBlock,
                    'slotName' : slotName},
             beforeSend: function()
@@ -105,11 +105,11 @@ var isEditorOpened = false;
             var contentType = (type == null) ? data.contentType : type;
             $.ajax({
                 type: 'POST',
-                url: frontController + 'backend/' + $('#al_available_languages').val() + '/addBlock',
-                data: {'page' :  $('#al_pages_navigator option:selected').text(),
-                       'language' : $('#al_languages_navigator option:selected').text(),
-                       'pageId' :  $('#al_pages_navigator option:selected').val(),
-                       'languageId' : $('#al_languages_navigator option:selected').val(),
+                url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/addBlock',
+                data: {'page' :  $('#al_pages_navigator').html(),
+                       'language' : $('#al_languages_navigator').html(),
+                       'pageId' :  $('#al_pages_navigator').attr('rel'),
+                       'languageId' : $('#al_languages_navigator').attr('rel'),
                        'idBlock' : idBlock,
                        'slotName' : slotName,
                        'contentType': contentType},
@@ -143,11 +143,11 @@ var isEditorOpened = false;
 
             $.ajax({
                 type: 'POST',
-                url: frontController + 'backend/' + $('#al_available_languages').val() + '/editBlock',
-                data: {'page' :  $('#al_pages_navigator option:selected').text(),
-                       'language' : $('#al_languages_navigator option:selected').text(),
-                       'pageId' :  $('#al_pages_navigator option:selected').val(),
-                       'languageId' : $('#al_languages_navigator option:selected').val(),
+                url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/editBlock',
+                data: {'page' :  $('#al_pages_navigator').html(),
+                       'language' : $('#al_languages_navigator').html(),
+                       'pageId' :  $('#al_pages_navigator').attr('rel'),
+                       'languageId' : $('#al_languages_navigator').attr('rel'),
                        'idBlock'    : $('body').data('idBlock'),
                        'slotName'   : $('body').data("slotName"),
                        'key'        : key,
@@ -183,11 +183,11 @@ var isEditorOpened = false;
             {
                 $.ajax({
                     type: 'POST',
-                    url: frontController + 'backend/' + $('#al_available_languages').val() + '/showExternalFilesManager',
-                    data: {'page' :  $('#al_pages_navigator option:selected').text(),
-                           'language' : $('#al_languages_navigator option:selected').text(),
-                           'pageId' :  $('#al_pages_navigator option:selected').val(),
-                           'languageId' : $('#al_languages_navigator option:selected').val(),
+                    url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/showExternalFilesManager',
+                    data: {'page' :  $('#al_pages_navigator').html(),
+                           'language' : $('#al_languages_navigator').html(),
+                           'pageId' :  $('#al_pages_navigator').attr('rel'),
+                           'languageId' : $('#al_languages_navigator').attr('rel'),
                            'key'      : key},
                     beforeSend: function()
                     {
@@ -218,11 +218,11 @@ var isEditorOpened = false;
         {
             $.ajax({
                 type: 'POST',
-                url: frontController + 'backend/' + $('#al_available_languages').val() + '/addExternalFile',
-                data: {'page' :  $('#al_pages_navigator option:selected').text(),
-                       'language' : $('#al_languages_navigator option:selected').text(),
-                       'pageId' :  $('#al_pages_navigator option:selected').val(),
-                       'languageId' : $('#al_languages_navigator option:selected').val(),
+                url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/addExternalFile',
+                data: {'page' :  $('#al_pages_navigator').html(),
+                       'language' : $('#al_languages_navigator').html(),
+                       'pageId' :  $('#al_pages_navigator').attr('rel'),
+                       'languageId' : $('#al_languages_navigator').attr('rel'),
                        'idBlock' : $('body').data('idBlock'),
                        'slotName' : $('body').data("slotName"),
                        'field'       : field,
@@ -268,11 +268,11 @@ var isEditorOpened = false;
             {
                 $.ajax({
                     type: 'POST',
-                    url: frontController + 'backend/' + $('#al_available_languages').val() + '/removeExternalFile',
-                    data: {'page' :  $('#al_pages_navigator option:selected').text(),
-                           'language' : $('#al_languages_navigator option:selected').text(),
-                           'pageId' :  $('#al_pages_navigator option:selected').val(),
-                           'languageId' : $('#al_languages_navigator option:selected').val(),
+                    url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/removeExternalFile',
+                    data: {'page' :  $('#al_pages_navigator').html(),
+                           'language' : $('#al_languages_navigator').html(),
+                           'pageId' :  $('#al_pages_navigator').attr('rel'),
+                           'languageId' : $('#al_languages_navigator').attr('rel'),
                            'idBlock'  : $('body').data('idBlock'),
                            'slotName'  : $('body').data('slotName'),
                            'field'    : field,
@@ -321,11 +321,11 @@ var isEditorOpened = false;
 
         $.ajax({
             type: 'POST',
-            url: frontController + 'backend/' + $('#al_available_languages').val() + '/deleteBlock',
-            data: {'page' :  $('#al_pages_navigator option:selected').text(),
-                   'language' : $('#al_languages_navigator option:selected').text(),
-                   'pageId' :  $('#al_pages_navigator option:selected').val(),
-                   'languageId' : $('#al_languages_navigator option:selected').val(),
+            url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/deleteBlock',
+            data: {'page' :  $('#al_pages_navigator').html(),
+                   'language' : $('#al_languages_navigator').html(),
+                   'pageId' :  $('#al_pages_navigator').attr('rel'),
+                   'languageId' : $('#al_languages_navigator').attr('rel'),
                    'slotName' : slotName,
                    'idBlock' : idBlock},
             beforeSend: function()

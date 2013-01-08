@@ -80,12 +80,13 @@
     <link href="{{ asset(value) }}" rel="stylesheet" type="text/css" media="all" />
     {% endfor %}
 {% if enable_yui_compressor is defined and enable_yui_compressor %}
-    {% stylesheets filter='?yui_css,cssrewrite' 'bundles/alphalemoncms/vendor/smoothness/jquery-ui.css'
+    {% stylesheets filter='?yui_css,cssrewrite' 'bundles/alphalemoncms/vendor/bootstrap/css/bootstrap.min.css'
+                                                'bundles/alphalemoncms/vendor/smoothness/jquery-ui.css'
                                                 'bundles/alphalemoncms/vendor/medialize/css/*'
                                                 'bundles/alphalemoncms/vendor/pageguide/css/pageguide.min.css'
-                                                'bundles/alphalemoncms/vendor/vendor-adapter.css'
-                                                'bundles/alphalemoncms/css/skins/alphaLemon/skin.css'
-                                                'bundles/alphalemoncms/vendor/bootstrap/css/bootstrap.min.css' %}
+                                                'bundles/alphalemoncms/vendor/vendor-adapter.css' 
+                                                'bundles/alphalemoncms/css/skins/bootstrap/skin.css'
+    %}
     <link href="{{ asset_url }}" rel="stylesheet" type="text/css" media="all" />
     {% endstylesheets %}
 {% else %}
@@ -135,37 +136,57 @@
 {% endblock %}
 
 {% block body %}
-{#
+
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
-        <a class="brand" href="#"><img src="/{{ skin_path }}/images/main_menu/small-logo.png" /></a>
-        <ul class="nav">
+        <a class="brand" href="#"><img src="/{{ skin_path }}/images/main_menu/small-logo.png" />AlphaLemon CMS</a>
+        <ul class="nav" >
             <li><a href="#" id="al_start_editor">Edit</a></li>
             <li><a href="#" id="al_stop_editor">Stop</a></li>
-            <li><a href="#" id="al_open_pages_panel">Pages</a></li>
-            <li><a href="#" id="al_open_languages_panel">Languages</a></li>
-            <li><a href="#" id="al_open_themes_panel">Themes</a></li>
-            <li><a href="#" id="al_open_media_library">Media Library</a></li>
-            <li><a href="#" id="al_deploy_site">Deploy</a></li>
-            {% if is_secure %}
-                <li><a href="#" id="al_open_users_manager">Users</a></li>
-                <li><a href="#" id="al_logout">Logout</a></li>
-            {% endif %}
-
-            <span id="al_languages_navigator_box">
-            {% include 'AlphaLemonCmsBundle:Cms:menu_combo.html.twig' with {'id': 'al_languages_navigator', 'items' : languages, 'selected' : language}  %}
-            </span>
-            <span id="al_pages_navigator_box">
-            {% include 'AlphaLemonCmsBundle:Cms:menu_combo.html.twig' with {'id': 'al_pages_navigator', 'items' : pages, 'selected' : page}  %}
-            </span>
-            Languages
-            {% include 'AlphaLemonCmsBundle:Cms:menu_combo.html.twig' with {'id': 'al_available_languages', 'items' : available_languages}  %}
-
         </ul>
+        <ul class="nav"> 
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                Website<b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" id="al_open_pages_panel">Pages</a></li>
+                    <li><a href="#" id="al_open_languages_panel">Languages</a></li>
+                    <li><a href="#" id="al_open_themes_panel">Themes</a></li>
+                    <li><a href="#" id="al_open_media_library">Media Library</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                Deploy<b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" class="al_deployer" rel="stage">Stage</a></li>
+                    <li><a href="#" class="al_deployer" rel="local">Production</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav"> 
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                Security<b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" id="al_open_users_manager">Users</a></li>
+                    <li><a href="#" id="al_logout">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+        {#<form class="navbar-form pull-right"></form>#}
+        <span class="pull-right">
+            {% include 'AlphaLemonCmsBundle:Cms:menu_combo.html.twig' with {'id': 'al_pages_navigator', 'items' : pages, 'text' : page_name, 'value' : page, 'type' : 'al_page_item'}  %}
+            {% include 'AlphaLemonCmsBundle:Cms:menu_combo.html.twig' with {'id': 'al_languages_navigator', 'items' : languages, 'text' : language_name, 'value' : language, 'type' : 'al_language_item'}  %}   
+            {% include 'AlphaLemonCmsBundle:Cms:menu_combo.html.twig' with {'id': 'al_available_languages', 'items' : available_languages, 'text' : 'English', 'button_type' : 'btn-primary', 'type' : 'al_site_language_item'}  %}
+        </span>   
     </div>
 </div>
-#}
 
+{#
 <div id="al_toolbar">
     <div class="al_float_left al_boxes_margins">
         <table>
@@ -186,7 +207,7 @@
                         <li><a href="#" id="al_open_themes_panel">Themes</a></li>
                         <li><a href="#" id="al_open_media_library">Media Library</a></li>
                     </ul>
-                </td>   #}
+                </td>   }
                 <td>
                     <ul class="toolbar-nav" >
                         <li><a href="#" id="al_start_editor">Edit</a></li>
@@ -234,7 +255,7 @@
                     <ul class="toolbar-nav" >
                         <li><a href="#" id="al_open_users_manager">Users</a></li>
                         <li><a href="#" id="al_logout">Logout</a></li>
-                    </ul>#}
+                    </ul>}
                 </td>  
                 {% endif %} 
             </tr>
@@ -260,7 +281,7 @@
         </table>
     </div>
     <div style="clear:both;"></div>
-</div>
+</div>#}
 
 <div id="al_panel"></div>
 

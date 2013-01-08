@@ -105,23 +105,32 @@
 })( jQuery );
 
 
-function Navigate()
+function Navigate(language, page)
 {
-    location.href = frontController + 'backend/' + $('#al_languages_navigator option:selected').attr('rel') + '/' + $('#al_pages_navigator option:selected').attr('rel');
+    location.href = frontController + 'backend/' + language + '/' + page;
 }
 
 $(document).ready(function(){
     try
     {
-        $('#al_languages_navigator').change(function()
-        {
-            Navigate();
+        $('.al_language_item').each(function(){
+            $(this).click(function()
+            {
+                Navigate($(this).attr('rel'), $('#al_pages_navigator').html());
+                
+                return false;
+            });
         });
 
-        $('#al_pages_navigator').change(function()
-        {
-            Navigate();
+        $('.al_page_item').each(function(){
+            $(this).click(function()
+            {
+                Navigate($('#al_languages_navigator').html(), $(this).attr('rel'));
+                
+                return false;
+            });
         });
+            
 
         $('#al_start_editor').click(function()
         {
@@ -148,10 +157,10 @@ $(document).ready(function(){
         {
             $.ajax({
                 type: 'POST',
-                url: frontController + 'backend/' + $('#al_available_languages option:selected').text() + '/al_showPages',
+                url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/al_showPages',
                 data: {
-                    'page' :  $('#al_pages_navigator option:selected').text(),
-                    'language' : $('#al_languages_navigator option:selected').text()
+                    'page' :  $('#al_pages_navigator').html(),
+                    'language' : $('#al_languages_navigator').html()
                 },
                 beforeSend: function()
                 {
@@ -179,10 +188,10 @@ $(document).ready(function(){
         {
             $.ajax({
                 type: 'POST',
-                url: frontController + 'backend/' + $('#al_available_languages').val() + '/al_showLanguages',
+                url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/al_showLanguages',
                 data: {
-                    'page' :  $('#al_pages_navigator option:selected').text(),
-                    'language' : $('#al_languages_navigator option:selected').text()
+                    'page' :  $('#al_pages_navigator').html(),
+                    'language' : $('#al_languages_navigator').html()
                 },
                 beforeSend: function()
                 {
@@ -209,10 +218,10 @@ $(document).ready(function(){
         {
             $.ajax({
                 type: 'POST',
-                url: frontController + 'backend/' + $('#al_available_languages').val() + '/al_showThemes',
+                url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/al_showThemes',
                 data: {
-                    'page' :  $('#al_pages_navigator option:selected').text(),
-                    'language' : $('#al_languages_navigator option:selected').text()
+                    'page' :  $('#al_pages_navigator').html(),
+                    'language' : $('#al_languages_navigator').html()
                 },
                 beforeSend: function()
                 {
@@ -239,9 +248,9 @@ $(document).ready(function(){
         {
             $.ajax({
                 type: 'POST',
-                url: frontController + 'backend/' + $('#al_available_languages').val() + '/al_showFilesManager',
-                data: {'page' :  $('#al_pages_navigator option:selected').val(),
-                    'language' : $('#al_languages_navigator option:selected').val()},
+                url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/al_showFilesManager',
+                data: {'page' :  $('#al_pages_navigator').attr('rel'),
+                    'language' : $('#al_languages_navigator').attr('rel')},
                 beforeSend: function()
                 {
                     $('body').AddAjaxLoader();
@@ -267,9 +276,9 @@ $(document).ready(function(){
         {
             $.ajax({
                 type: 'POST',
-                url: frontController + 'backend/' + $('#al_available_languages').val() + '/al_' + $(this).attr('rel')  + '_deploy',
-                data: {'page' :  $('#al_pages_navigator option:selected').val(),
-                    'language' : $('#al_languages_navigator option:selected').val()},
+                url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/al_' + $(this).attr('rel')  + '_deploy',
+                data: {'page' :  $('#al_pages_navigator').attr('rel'),
+                    'language' : $('#al_languages_navigator').attr('rel')},
                 beforeSend: function()
                 {
                     $('body').AddAjaxLoader();

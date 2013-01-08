@@ -66,9 +66,9 @@ function InitPagesCommands()
         var isPublished = ($('#pages_isPublished').is(':checked')) ? 1 : 0;
         $.ajax({
             type: 'POST',
-            url: frontController + 'backend/' + $('#al_available_languages').val() + '/al_savePage',
-            data: {'language' : $('#al_languages_navigator option:selected').text(),
-                   'page' : $('#al_pages_navigator option:selected').text(),
+            url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/al_savePage',
+            data: {'language' : $('#al_languages_navigator').html(),
+                   'page' : $('#al_pages_navigator').html(),
                    'pageId' : $('#seo_attributes_idPage').val(),
                    'languageId' : $('#seo_attributes_idLanguage option:selected').val(),
                    'pageName' : $('#pages_pageName').val(),
@@ -106,9 +106,9 @@ function InitPagesCommands()
         {
             $.ajax({
                 type: 'POST',
-                url: frontController + 'backend/' + $('#al_available_languages').val() + '/al_deletePage',
-                data: {'language' : $('#al_languages_navigator option:selected').text(),
-                       'page' : $('#al_pages_navigator option:selected').text(),
+                url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/al_deletePage',
+                data: {'language' : $('#al_languages_navigator').html(),
+                       'page' : $('#al_pages_navigator').html(),
                        'languageId' : $('#seo_attributes_idLanguage option:selected').val(),
                        'pageId' : $('#seo_attributes_idPage').val()
                    },
@@ -209,9 +209,9 @@ function LoadSeoAttributes(idPage)
     $('#seo_attributes_idPage').val(idPage);
     $.ajax({
         type: 'POST',
-        url: frontController + 'backend/' + $('#al_available_languages').val() + '/al_loadSeoAttributes',
-        data: {'language' : $('#al_languages_navigator option:selected').text(),
-               'page' : $('#al_pages_navigator option:selected').text(),
+        url: frontController + 'backend/' + $('#al_available_languages').attr('rel') + '/al_loadSeoAttributes',
+        data: {'language' : $('#al_languages_navigator').html(),
+               'page' : $('#al_pages_navigator').html(),
                'languageId' : $('#seo_attributes_idLanguage option:selected').val(),
                'pageId' : idPage},
         beforeSend: function()
