@@ -181,7 +181,7 @@
         <span class="pull-right">
             {% include 'AlphaLemonCmsBundle:Cms:menu_combo.html.twig' with {'id': 'al_pages_navigator', 'items' : pages, 'text' : page_name, 'value' : page, 'type' : 'al_page_item'}  %}
             {% include 'AlphaLemonCmsBundle:Cms:menu_combo.html.twig' with {'id': 'al_languages_navigator', 'items' : languages, 'text' : language_name, 'value' : language, 'type' : 'al_language_item'}  %}   
-            {% include 'AlphaLemonCmsBundle:Cms:menu_combo.html.twig' with {'id': 'al_available_languages', 'items' : available_languages, 'text' : 'English', 'button_type' : 'btn-primary', 'type' : 'al_site_language_item'}  %}
+            {% include 'AlphaLemonCmsBundle:Cms:menu_combo.html.twig' with {'id': 'al_available_languages', 'items' : available_languages, 'text' : 'English', 'value' : 'en', 'button_type' : 'btn-primary', 'type' : 'al_site_language_item'}  %}
         </span>   
     </div>
 </div>
