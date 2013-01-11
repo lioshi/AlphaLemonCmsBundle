@@ -21,15 +21,15 @@
     </select>
 #}
 
-<div class="btn-group">
+<div class="btn-group dropdown-zindex">
     <button id="{{ id }}" class="btn {{ button_type is defined ? button_type : '' }} input-auto" {% if value is defined %}rel="{{ value }}"{% endif %}>{{ text }}</button>
     <button class="btn {{ button_type is defined ? button_type : '' }} dropdown-toggle" data-toggle="dropdown">
     <span class="caret"></span>
     </button>
-    <ul class="dropdown-menu dropdown-height pull-right">
-        {% for id, name in items %}
-            <li id="{{ id }}" class="{{ type }}" rel="{{ name }}"><a href="#">{{ name }}</a></li>
-        {% endfor %}
+    <ul class="dropdown-menu dropdown-height pull-right dropdown-zindex">
+    {% for id, name in items %}
+        <li id="{{ id }}" class="{{ type }} dropdown-zindex" rel="{{ name }}"><a href="#">{{ name }}</a></li>
+    {% endfor %}
     </ul>
 </div>
 

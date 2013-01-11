@@ -131,7 +131,7 @@ function UpdateLanguagesJSon(response)
         switch(item.key)
         {
             case "message":
-                $('body').showAutoCloseDialog(item.value);
+                $('body').showAlert(item.value);
                 break;
             case "languages":
                 var idSelectedLanguage = $('#al_languages_list .al_element_selected').attr('ref');

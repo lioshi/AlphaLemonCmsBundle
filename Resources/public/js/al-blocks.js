@@ -358,7 +358,7 @@ function updateContentsJSon(response, editorWidth)
         switch(item.key)
         {
             case "message":
-                $('body').showAutoCloseDialog(item.value);
+                $('body').showAlert(item.value);
                 break;
             case "redraw-slot":
                 slot = '.' + item.slotName;

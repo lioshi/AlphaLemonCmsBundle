@@ -79,6 +79,8 @@
                 {{ form_errors(pageAttributesForm.keywords) }} {{ form_widget(pageAttributesForm.keywords, { 'attr': {'rows': '3', 'cols': '28', 'title': "Deprecated by several Search Engines (It's strongly suggested to leave it blank)" | trans([], domain)}}) }}
                 </div>
             </div>
+                
+            {{ form_rest(pagesForm) }}
         </form>
 
         <input id="al_page_saver" type="submit" value="{{ "Save" | trans([], "al_commands") }}" class="btn btn-primary pull-right" />
@@ -91,6 +93,7 @@
     <div>
         {{ form_label(pageAttributesForm.idLanguage, "Languages" | trans([], domain)) }}
         {{ form_errors(pageAttributesForm.idLanguage) }} {{ form_widget(pageAttributesForm.idLanguage) }}
+        {{ form_rest(pageAttributesForm) }}
     </div>
 
     <div id="al_pages_box" class="al_panel_box">

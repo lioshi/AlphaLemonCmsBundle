@@ -60,28 +60,37 @@ GetTopMost = function()
 };
 
 (function($){
-    $.fn.showAutoCloseDialog = function(html, width, delay)
+    $.fn.showAlert = function(html, delay, type)
     {
-        if (width == null) width = 400;
-        if (delay == null) delay = 2000;
+        if (delay == null) delay = 1500;
+        if (type == null) type = 'alert-success';
 
+        /*
         var zIndexDialog = GetTopMost();
         var options = {
-            width: width,
             zIndex: zIndexDialog,
             buttons: {}
-        };
-
-        var message = '<div class="al_success_big">' + html + '</div>';
-        message += '<div class="al_autoclose">This window closes automatically in 2 seconds</div>';
-
-        InitDialog('al_message_success', options);
-        $('#al_message_success')
-            .html(message)
-            .dialog('open')
-            .delay(delay)
-            .fadeOut(function(){ $(this).dialog("close") });
-
+        };*/
+        
+        var alertBody = '<button type="button" class="close" data-dismiss="alert">&times;</button>';
+        alertBody += '<span id="al_alert_message">' + html + '</span>';
+        
+        var alertBox = $('<div id="al_alert" class="alert"></div>')
+            .html(alertBody)
+            .addClass(type)
+            .appendTo('body')
+            .center(null, 0 ,200)
+            .css('z-index', GetTopMost())
+            .show()
+        ;
+           
+        if (delay > 0) {
+            $(alertBox)
+                .delay(delay)
+                .fadeOut(function(){ $(this).alert('close'); })
+            ;
+        }
+            
         return false;
     };
 

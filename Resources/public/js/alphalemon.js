@@ -257,7 +257,7 @@ $(document).ready(function(){
                 },
                 success: function(html)
                 {
-                    $('body').showAutoCloseDialog(html);
+                    $('body').showAlert(html);
                 },
                 error: function(err)
                 {
@@ -285,7 +285,7 @@ $(document).ready(function(){
                 },
                 success: function(html)
                 {
-                    $('body').showAutoCloseDialog(html);
+                    $('body').showAlert(html);
                 },
                 error: function(err)
                 {

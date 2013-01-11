@@ -21,6 +21,7 @@ use AlphaLemon\AlphaLemonCmsBundle\Core\Form\Page\PagesForm;
 use AlphaLemon\AlphaLemonCmsBundle\Core\Form\Seo\SeoForm;
 use Symfony\Component\HttpFoundation\Response;
 use AlphaLemon\AlphaLemonCmsBundle\Core\Form\ModelChoiceValues\ChoiceValues;
+use AlphaLemon\AlphaLemonCmsBundle\Core\Content\Template\AlTemplateManager;
 
 class PagesController extends Base\BaseController
 {
@@ -97,7 +98,7 @@ class PagesController extends Base\BaseController
                 $request->get('templateName')
             );
 
-            $templateManager = new \AlphaLemon\AlphaLemonCmsBundle\Core\Content\Template\AlTemplateManager(
+            $templateManager = new AlTemplateManager(
                 $this->container->get('alpha_lemon_cms.events_handler'),
                 $this->container->get('alpha_lemon_cms.factory_repository'),
                 $template,
@@ -120,7 +121,9 @@ class PagesController extends Base\BaseController
                             'MetaKeywords' => $request->get('keywords'));
 
             if ($pageManager->save($values)) {
-                return $this->buildJSonHeader('The page has been successfully saved');
+                $page = (null === $alPage) ? $pageManager->get() : $alPage;
+                
+                return $this->buildJSonHeader('The page has been successfully saved', $page);
             } 
             
             // @codeCoverageIgnoreStart
@@ -179,13 +182,13 @@ class PagesController extends Base\BaseController
                 throw new \RuntimeException($this->container->get('translator')->trans('Any page has been choosen for removing'));
             }
 
-            return $this->buildJSonHeader($message);
+            return $this->buildJSonHeader($message, $alPage);
         } catch (\Exception $e) {
             return $this->renderDialogMessage($e->getMessage());
         }
     }
 
-    protected function buildJSonHeader($message)
+    protected function buildJSonHeader($message, $page = null)
     {
         $pages = $this->getPages();
 
@@ -193,7 +196,7 @@ class PagesController extends Base\BaseController
         $values = array();
         $values[] = array("key" => "message", "value" => $message);
         $values[] = array("key" => "pages", "value" => $this->container->get('templating')->render('AlphaLemonCmsBundle:Pages:pages_list.html.twig', array('pages' => $pages)));
-        $values[] = array("key" => "pages_menu", "value" => $this->container->get('templating')->render('AlphaLemonCmsBundle:Cms:menu_combo.html.twig', array('id' => 'al_pages_navigator', 'selected' => $request->get('page'), 'items' => $pages)));
+        $values[] = array("key" => "pages_menu", "value" => $this->container->get('templating')->render('AlphaLemonCmsBundle:Cms:menu_combo.html.twig', array('id' => 'al_pages_navigator', 'type' => 'al_page_item', 'value' => $page->getId(), 'text' => $request->get('page'), 'items' => $pages)));
 
         $response = new Response(json_encode($values));
         $response->headers->set('Content-Type', 'application/json');
