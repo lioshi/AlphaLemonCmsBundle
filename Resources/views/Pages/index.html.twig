@@ -30,13 +30,13 @@
             <div class="control-group bootstrap-form-item-margin-fixer">
                 {{ form_label(pagesForm.pageName, "Page name" | trans([], domain), { 'label_attr': {'class': 'control-label'} }) }}
                 <div class="controls">
-                {{ form_errors(pagesForm.pageName) }} {{ form_widget(pagesForm.pageName, { 'attr': {'title': "The name of the page. It must be unique" | trans([], domain)}}) }}
+                {{ form_errors(pagesForm.pageName) }} {{ form_widget(pagesForm.pageName, { 'attr': {'title': "The name of the page. It must be unique" | trans([], domain) } }) }}
                 </div>
             </div>
             <div class="control-group bootstrap-form-item-margin-fixer">
                 {{ form_label(pagesForm.template, "Template" | trans([], domain), { 'label_attr': {'class': 'control-label'} }) }}
                 <div class="controls">
-                {{ form_errors(pagesForm.template) }} {{ form_widget(pagesForm.template, { 'attr': {'title': "Choose one template from the current theme" | trans([], domain)}}) }}
+                {{ form_errors(pagesForm.template) }} {{ form_widget(pagesForm.template, { 'attr': {'title': "Choose one template from the current theme" | trans([], domain) } }) }}
                 </div>
             </div>
             <div class="control-group">
@@ -58,25 +58,25 @@
             <div class="control-group bootstrap-form-item-margin-fixer">
                 {{ form_label(pageAttributesForm.permalink, "Permalink" | trans([], domain), { 'label_attr': {'class': 'control-label'} }) }}
                 <div class="controls">
-                {{ form_errors(pageAttributesForm.permalink) }} {{ form_widget(pageAttributesForm.permalink, { 'attr': {'title': "The displayed link name for the current language" | trans([], domain)}}) }}
+                {{ form_errors(pageAttributesForm.permalink) }} {{ form_widget(pageAttributesForm.permalink, { 'attr': {'title': "The displayed link name for the current language" | trans([], domain) } }) }}
                 </div>
             </div>
             <div class="control-group bootstrap-form-item-margin-fixer">
                 {{ form_label(pageAttributesForm.title, "Meta-Title" | trans([], domain), { 'label_attr': {'class': 'control-label'} }) }}
                 <div class="controls">
-                {{ form_errors(pageAttributesForm.title) }} {{ form_widget(pageAttributesForm.title, { 'attr': {'title': "The page title. It should be max 60 chars" | trans([], domain)}}) }}
+                {{ form_errors(pageAttributesForm.title) }} {{ form_widget(pageAttributesForm.title, { 'attr': {'title': "The page title. It should be max 60 chars" | trans([], domain) } }) }}
                 </div>
             </div>
             <div class="control-group bootstrap-form-item-margin-fixer">
                 {{ form_label(pageAttributesForm.description, "Meta-Description" | trans([], domain), { 'label_attr': {'class': 'control-label'} }) }}
                 <div class="controls">
-                {{ form_errors(pageAttributesForm.description) }}  {{ form_widget(pageAttributesForm.description, { 'attr': {'rows': '4', 'cols': '28', 'title': "A brief description of the page" | trans([], domain)}}) }}
+                {{ form_errors(pageAttributesForm.description) }}  {{ form_widget(pageAttributesForm.description, { 'attr': {'rows': '4', 'cols': '28', 'title': "A brief description of the page" | trans([], domain) } }) }}
                 </div>
             </div>
             <div class="control-group bootstrap-form-item-margin-fixer">
                 {{ form_label(pageAttributesForm.keywords, "Meta-Keywords" | trans([], domain), { 'label_attr': {'class': 'control-label'} }) }}
                 <div class="controls">
-                {{ form_errors(pageAttributesForm.keywords) }} {{ form_widget(pageAttributesForm.keywords, { 'attr': {'rows': '3', 'cols': '28', 'title': "Deprecated by several Search Engines (It's strongly suggested to leave it blank)" | trans([], domain)}}) }}
+                {{ form_errors(pageAttributesForm.keywords) }} {{ form_widget(pageAttributesForm.keywords, { 'attr': {'rows': '3', 'cols': '28', 'title': "Deprecated by several Search Engines (It's strongly suggested to leave it blank)" | trans([], domain) } }) }}
                 </div>
             </div>
                 

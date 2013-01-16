@@ -86,7 +86,7 @@ var isEditorOpened = false;
             },
             error: function(err)
             {
-                $('body').showDialog(err.responseText);
+                $('body').showAlert(err.responseText, 0, 'alert-error');
             },
             complete: function()
             {
@@ -123,7 +123,7 @@ var isEditorOpened = false;
                 },
                 error: function(err)
                 {
-                    $('body').showDialog(err.responseText);
+                    $('body').showAlert(err.responseText, 0, 'alert-error');
                 },
                 complete: function()
                 {
@@ -163,7 +163,7 @@ var isEditorOpened = false;
                 },
                 error: function(err)
                 {
-                    $('body').showDialog(err.responseText);
+                    $('body').showAlert(err.responseText, 0, 'alert-error');
                 },
                 complete: function()
                 {
@@ -199,7 +199,7 @@ var isEditorOpened = false;
                     },
                     error: function(err)
                     {
-                        $('body').showDialog(err.responseText);
+                        $('body').showAlert(err.responseText, 0, 'alert-error');
                     },
                     complete: function()
                     {
@@ -237,7 +237,7 @@ var isEditorOpened = false;
                 },
                 error: function(err)
                 {
-                    $('body').showDialog(err.responseText);
+                    $('body').showAlert(err.responseText, 0, 'alert-error');
                 },
                 complete: function()
                 {
@@ -287,7 +287,7 @@ var isEditorOpened = false;
                     },
                     error: function(err)
                     {
-                        $('body').showDialog(err.responseText);
+                        $('body').showAlert(err.responseText, 0, 'alert-error');
                     },
                     complete: function()
                     {
@@ -338,7 +338,7 @@ var isEditorOpened = false;
             },
             error: function(err)
             {
-                $('body').showDialog(err.responseText);
+                $('body').showAlert(err.responseText, 0, 'alert-error');
             },
             complete: function()
             {
@@ -393,6 +393,7 @@ function updateContentsJSon(response, editorWidth)
                         buttons:{},
                         width: editorWidth,
                         zIndex: 120000,
+                        title: 'AlphaLemon CMS - Editor Contents',
                         close: function(event, ui)
                         {
                             isEditorOpened = false;
@@ -404,6 +405,9 @@ function updateContentsJSon(response, editorWidth)
                     InitDialog('al_editor_dialog', dialogOptions);
                     $('#al_editor_dialog').html(item.value);
                     $('#al_editor_dialog').dialog('open');
+                     /*                       
+                    var editor = InitDialog('al_editor_dialog');                    
+                    $(editor).showDialog('Editor Contents', item.value);*/
                 }
 
                 break;

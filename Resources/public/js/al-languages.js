@@ -74,7 +74,7 @@ function InitLanguagesCommands()
             },
             error: function(err)
             {
-                $('body').showDialog(err.responseText);
+                $('body').showAlert(err.responseText, 0, 'alert-error');
             },
             complete: function()
             {
@@ -107,7 +107,7 @@ function InitLanguagesCommands()
                 },
                 error: function(err)
                 {
-                    $('body').showDialog(err.responseText);
+                    $('body').showAlert(err.responseText, 0, 'alert-error');
                 },
                 complete: function()
                 {
@@ -194,7 +194,7 @@ function LoadLanguageAttributes(idLanguage)
         },
         error: function(err)
         {
-            $('body').showDialog(err.responseText);
+            $('body').showAlert(err.responseText, 0, 'alert-error');
         },
         complete: function()
         {

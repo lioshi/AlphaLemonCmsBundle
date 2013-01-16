@@ -48,5 +48,5 @@
             "left": (((($(parent).width() - this.outerWidth()) / 2) + $(parent).scrollLeft()) + xGap + "px")
         });
         return this;
-    }
+    };
 })($);

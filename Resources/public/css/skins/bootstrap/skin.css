@@ -256,8 +256,6 @@
 #al_alert {
   display: none;
   position: absolute;
-  top: 400px;
-  margin: 0 auto;
   z-index: 1900;
 }
 

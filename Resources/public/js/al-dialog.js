@@ -15,12 +15,36 @@
  */
 
 InitDialog = function(id, options)
-{
+{/*
+    if (id == null) id = "al_dialog";
+    
+    var modal = '<div id="' + id + '" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="al_dialog_title" aria-hidden="true">';
+        modal += '<div class="modal-header">';
+        modal += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>';
+        modal += '<h3 class="al_dialog_title"></h3>';
+        modal += '</div>';
+        modal += '<div class="modal-body">';
+        modal += '</div>';
+        modal += '</div>';
+        
+        if($('body').find(id).length == 0)
+        {
+            $(modal).css("display", "none")
+                    .appendTo('body')
+                    .draggable({
+                        handle: ".modal-header"
+                    })
+            ;
+        }
+    
+    return modal;
+    */
     try
     {
         var defaultOptions = {
         autoOpen: false,
         width: 800,
+        title: 'AlphaLemon CMS',
         buttons: {
             "Close": function() {
                 $(this).dialog("close");
@@ -75,12 +99,13 @@ GetTopMost = function()
         var alertBody = '<button type="button" class="close" data-dismiss="alert">&times;</button>';
         alertBody += '<span id="al_alert_message">' + html + '</span>';
         
+        var zIndexDialog = GetTopMost();
         var alertBox = $('<div id="al_alert" class="alert"></div>')
             .html(alertBody)
             .addClass(type)
             .appendTo('body')
-            .center(null, 0 ,200)
-            .css('z-index', GetTopMost())
+            .center() //null, 0 ,200
+            .css('z-index', zIndexDialog)
             .show()
         ;
            
@@ -90,12 +115,15 @@ GetTopMost = function()
                 .fadeOut(function(){ $(this).alert('close'); })
             ;
         }
-            
-        return false;
+        
+            //alertBox.nextTo($('#al_page_saver'), {position:'right', shareBorder:'left'});
+            //alertBox.show();
+        return this;
     };
 
-    $.fn.showDialog = function(html, width)
+    $.fn.showDialog = function(title, content, width)
     {
+        
         if (width == null) width = 800;
 
         var zIndexDialog = GetTopMost();
@@ -109,6 +137,13 @@ GetTopMost = function()
             .html(html)
             .dialog('open');
 
-        return false;
+        return this;
+        
+        /*
+        $(this).find('.al_dialog_title').html(title);
+        $(this).find('.modal-body').html(content);
+        $(this).modal();
+        
+        return this;*/
     };
 })($);

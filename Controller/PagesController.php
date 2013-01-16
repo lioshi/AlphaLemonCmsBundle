@@ -196,7 +196,7 @@ class PagesController extends Base\BaseController
         $values = array();
         $values[] = array("key" => "message", "value" => $message);
         $values[] = array("key" => "pages", "value" => $this->container->get('templating')->render('AlphaLemonCmsBundle:Pages:pages_list.html.twig', array('pages' => $pages)));
-        $values[] = array("key" => "pages_menu", "value" => $this->container->get('templating')->render('AlphaLemonCmsBundle:Cms:menu_combo.html.twig', array('id' => 'al_pages_navigator', 'type' => 'al_page_item', 'value' => $page->getId(), 'text' => $request->get('page'), 'items' => $pages)));
+        $values[] = array("key" => "pages_menu", "value" => $this->container->get('templating')->render('AlphaLemonCmsBundle:Cms:menu_combo.html.twig', array('id' => 'al_pages_navigator', 'type' => 'al_page_item', 'value' => (null !== $page) ? $page->getId() : 0, 'text' => $request->get('page'), 'items' => $pages)));
 
         $response = new Response(json_encode($values));
         $response->headers->set('Content-Type', 'application/json');
