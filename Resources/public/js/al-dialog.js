@@ -89,12 +89,6 @@ GetTopMost = function()
         if (delay == null) delay = 1500;
         if (type == null) type = 'alert-success';
 
-        /*
-        var zIndexDialog = GetTopMost();
-        var options = {
-            zIndex: zIndexDialog,
-            buttons: {}
-        };*/
         
         var alertBody = '<button type="button" class="close" data-dismiss="alert">&times;</button>';
         alertBody += '<span id="al_alert_message">' + html + '</span>';
@@ -116,8 +110,6 @@ GetTopMost = function()
             ;
         }
         
-            //alertBox.nextTo($('#al_page_saver'), {position:'right', shareBorder:'left'});
-            //alertBox.show();
         return this;
     };
 

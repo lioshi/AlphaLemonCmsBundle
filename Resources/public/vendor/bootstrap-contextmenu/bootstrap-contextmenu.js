@@ -1,6 +1,6 @@
 /*!
  * Bootstrap Context Menu
- * Version: 1.0
+ * Version: 2.0
  * A small variation of the dropdown plugin by @sydcanem
  * https://github.com/sydcanem/bootstrap-contextmenu
  *
@@ -36,6 +36,7 @@
   var toggle = '[data-toggle=context]'
     , ContextMenu = function (element) {
         var $el = $(element).on('contextmenu.context.data-api', this.toggle);
+        
         var $target = $($el.attr('data-target'));
         $('html').on('click.context.data-api', function (e) {
           if (!e.ctrlKey) {
@@ -48,7 +49,7 @@
 
     constructor: ContextMenu
     ,toggle: function(e) {
-
+        
       var $this = $(this)
         , $menu
         , $contextmenu;
@@ -56,22 +57,14 @@
       if ($this.is('.disabled, :disabled')) return;
 
       $menu = getMenu($this);
-      $menu.removeClass('open');
+      $menu.removeClass('open')
+              .data('parent', null);
 
-      $contextmenu = $this.find('#context-menu');
-
-      if (!$contextmenu.length) {
-        var tp = getPosition(e, $this, $menu);
-        $menu.attr('style', '')
+      var tp = getPosition(e, $menu);
+      $menu.attr('style', '')
               .css(tp)
-              .addClass('open');
-        $this.append($menu);
-      } else {
-        var tp = getPosition(e, $this, $menu);
-        $menu.attr('style', '')
-              .css(tp)
-              .toggleClass('open');
-      }
+              .toggleClass('open')
+              .data('parent', $this);
 
       return false;
     }
@@ -92,35 +85,9 @@
     return $menu;
   }
 
-  function getPosition(e, $this, $menu) {
-      
-      var offset;console.log("T", e.pageY, "L", e.pageX);
-    offset = {position: 'absolute', top: e.pageY, left: e.pageX};
-
-    // correct offset if viewport demands it
-    var $win = $(window),
-        bottom = $win.scrollTop() + $win.height(),
-        right = $win.scrollLeft() + $win.width(),
-        height = $menu.height(),
-        width = $menu.width();
-
-    if (offset.top + height > bottom) {
-        offset.top -= height;
-    }
-
-    if (offset.left + width > right) {
-        offset.left -= width;
-    }
-console.log(offset);
-    return offset;
-      
-      /*
+  function getPosition(e, $menu) {
     var mouseX = e.pageX
       , mouseY = e.pageY
-      , posX = e.pageX - $this[0].offsetLeft
-      , posY = e.pageY - $this[0].offsetTop
-      , contextX = $this.width()
-      , contextY = $this.height()
       , boundsX = $(window).width()
       , boundsY = $(window).height()
       , menuWidth = $menu.find('.dropdown-menu').outerWidth()
@@ -129,26 +96,27 @@ console.log(offset);
       , Y, X;
 
     if (mouseY + menuHeight > boundsY) {
-      Y = {"bottom": (contextY - posY) + menuHeight};
+      Y = {"top": mouseY - menuHeight};
     } else {
-      Y = {"top": posY};
+      Y = {"top": mouseY};
     }
 
     if (mouseX + menuWidth > boundsX) {
-      X = {"right": (contextX - posX) + menuWidth};
+      X = {"left": mouseX - menuWidth};
     } else {
-      X = {"left": posX};
+      X = {"left": mouseX};
     }
 
-    return $.extend(tp, Y, X);*/
+    return $.extend(tp, Y, X);
   }
 
   function clearMenus(e) {
     if (!e.ctrlKey) {
-      getMenu($(toggle))
+      $(toggle).each(function() {
+        getMenu($(this))
           .removeClass('open');
+      });
     }
-
   }
 
   /* CONTEXT MENU PLUGIN DEFINITION

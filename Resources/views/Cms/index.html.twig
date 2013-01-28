@@ -34,23 +34,6 @@
     {
         frontController = '{{ frontController }}';
 
-        $.contextMenu({
-            selector: '.al_edit_on',
-            items: {
-                "addmenu": {
-                    "name": "Add",
-                    "items": {
-                        {% for item, description in available_blocks %}
-                        "{{ item }}": {"name": "{{ description }}", callback: function(key, opt){ opt.$trigger.AddBlock("{{ item }}"); }},
-                        {% endfor %}
-                    }
-                },
-                "sep1": "---------",
-                "edit": {"name": "Edit", "icon": "edit", callback: function(key, opt){ opt.$trigger.OpenEditor(); } },
-                "delete": {"name": "Delete", "icon": "cut", callback: function(key, opt){ opt.$trigger.DeleteContent(); }}
-            }
-        });
-
         tl.pg.init(
             {
                 "pg_caption": "Help"
@@ -59,7 +42,9 @@
         
         // Workaroud to close the twitter bootstrap dropdown when a menu item is clicked
         $('.dropdown-menu li a').each(function(){
-            $(this).click(function(){$('.dropdown').removeClass('open')});
+            $(this).click(function(){
+                $('.dropdown').removeClass('open');
+            });
         });
         
         cmsStartInternalJavascripts();
@@ -69,7 +54,9 @@
 
 {% block internal_header_stylesheets %}
     {{ parent() }}
+    <style>
     {{ internal_stylesheets|raw }}
+    </style>
 {% endblock %}
 
 {% block external_stylesheets %}
@@ -80,9 +67,8 @@
     <link href="{{ asset(value) }}" rel="stylesheet" type="text/css" media="all" />
     {% endfor %}
 {% if enable_yui_compressor is defined and enable_yui_compressor %}
-    {% stylesheets filter='?yui_css,cssrewrite' 'bundles/alphalemoncms/vendor/jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom.css'
+    {% stylesheets filter='?yui_css,cssrewrite' 'bundles/alphalemoncms/vendor/jquery-ui/css/flick/jquery-ui-1.10.0.custom.min.css'
                                                 'bundles/alphalemoncms/vendor/bootstrap/css/bootstrap.min.css'
-                                                'bundles/alphalemoncms/vendor/medialize/css/*'
                                                 'bundles/alphalemoncms/vendor/pageguide/css/pageguide.min.css'
                                                 'bundles/alphalemoncms/vendor/vendor-adapter.css' 
                                                 'bundles/alphalemoncms/css/skins/bootstrap/skin.css'
@@ -90,12 +76,12 @@
     <link href="{{ asset_url }}" rel="stylesheet" type="text/css" media="all" />
     {% endstylesheets %}
 {% else %}
-    {% stylesheets filter='cssrewrite' 'bundles/alphalemoncms/vendor/bootstrap/css/bootstrap.min.css'
-                                       'bundles/alphalemoncms/vendor/smoothness/jquery-ui.css'
-                                       'bundles/alphalemoncms/vendor/medialize/css/*'
+    {% stylesheets filter='cssrewrite' 'bundles/alphalemoncms/vendor/smoothness/jquery-ui.css'
                                        'bundles/alphalemoncms/vendor/pageguide/css/pageguide.min.css'
                                        'bundles/alphalemoncms/vendor/vendor-adapter.css'
-                                       'bundles/alphalemoncms/css/skins/alphaLemon/skin.css' %}
+                                       'bundles/alphalemoncms/css/skins/alphaLemon/skin.css'
+                                       'bundles/alphalemoncms/vendor/bootstrap/css/bootstrap.min.css' 
+    %}
     <link href="{{ asset_url }}" rel="stylesheet" type="text/css" media="screen" />
     {% endstylesheets %}
 {% endif %}
@@ -106,29 +92,33 @@
     {{ parent() }}
     {% if enable_yui_compressor is defined and enable_yui_compressor %}
     {% javascripts  filter='?yui_js' 'bundles/alphalemonthemeengine/js/vendor/jquery/jquery-last.min.js'
-                                     'bundles/alphalemoncms/vendor/jquery-ui-bootstrap/js/jquery-ui-1.8.16.custom.min.js'
+                                     'bundles/alphalemoncms/vendor/jquery-ui/js/jquery-ui-1.10.0.custom.min.js'
+                                     'bundles/alphalemoncms/vendor/bootstrap/js/bootstrap.js'
+                                     'bundles/alphalemoncms/vendor/bootstrap-contextmenu/bootstrap-contextmenu.js'
                                      'bundles/alphalemonthemeengine/js/vendor/jquery.easing-1.3.js'
                                      'bundles/alphalemonthemeengine/js/vendor/jquery.metadata.js'
                                      'bundles/alphalemonthemeengine/js/vendor/jquery.ui.position.js'
                                      'bundles/alphalemoncms/vendor/pageguide/js/pageguide.js'
-                                     'bundles/alphalemoncms/vendor/medialize/js/*'
-                                     'bundles/alphalemoncms/js/*' %}
+                                     'bundles/alphalemoncms/js/*' 
+    %} 
+    
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
     {% else %}
     {% javascripts  'bundles/alphalemonthemeengine/js/vendor/jquery/jquery-last.min.js'
-                    'bundles/alphalemonthemeengine/js/vendor/jquery-ui.min.js'
+                    'bundles/alphalemoncms/vendor/jquery-ui/js/jquery-ui-1.10.0.custom.min.js'
+                    'bundles/alphalemoncms/vendor/bootstrap/js/bootstrap.js'
+                    'bundles/alphalemoncms/vendor/bootstrap-contextmenu/bootstrap-contextmenu.js'
                     'bundles/alphalemonthemeengine/js/vendor/jquery.easing-1.3.js'
                     'bundles/alphalemonthemeengine/js/vendor/jquery.metadata.js'
                     'bundles/alphalemonthemeengine/js/vendor/jquery.ui.position.js'
-                    'bundles/alphalemoncms/vendor/medialize/js/*'
                     'bundles/alphalemoncms/vendor/pageguide/js/pageguide.js'
-                    'bundles/alphalemoncms/js/*' %}
+                    'bundles/alphalemoncms/js/*' 
+    %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
     {% endif %}
 
-    <script src="/bundles/alphalemoncms/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/js/tiny_mce/tiny_mce.js"></script>
     {% for value in templateJavascripts %}
     <script src="{{ asset(value) }}"></script>
@@ -177,7 +167,7 @@
                 </ul>
             </li>
         </ul>
-        {#<form class="navbar-form pull-right"></form>#}
+            
         <span class="pull-right">
             <span id="al_languages_navigator_box">
                 {% include 'AlphaLemonCmsBundle:Cms:menu_combo.html.twig' with {'id': 'al_languages_navigator', 'items' : languages, 'text' : language_name, 'value' : language, 'type' : 'al_language_item'}  %}               
@@ -190,112 +180,22 @@
     </div>
 </div>
 
-{#
-<div id="al_toolbar">
-    <div class="al_float_left al_boxes_margins">
-        <table>
-            <tr>
-                <td id="al_small_logo"><img src="/{{ skin_path }}/images/main_menu/small-logo.png" /></td>
-            </tr>
-        </table>
-    </div>
-    <div id="al_menu" class="al_float_left">
-        <table>
-            <tr>
-                {#<td>
-                    <ul class="toolbar-nav" >
-                        <li><a href="#" id="al_start_editor">Edit</a></li>
-                        <li><a href="#" id="al_stop_editor">Stop</a></li>
-                        <li><a href="#" id="al_open_pages_panel">Pages</a></li>
-                        <li><a href="#" id="al_open_languages_panel">Languages</a></li>
-                        <li><a href="#" id="al_open_themes_panel">Themes</a></li>
-                        <li><a href="#" id="al_open_media_library">Media Library</a></li>
-                    </ul>
-                </td>   }
-                <td>
-                    <ul class="toolbar-nav" >
-                        <li><a href="#" id="al_start_editor">Edit</a></li>
-                        <li><a href="#" id="al_stop_editor">Stop</a></li>
-                    </ul>
-                </td> 
-                <td>
-                    <ul class="nav"> 
-                        <li class="dropdown toolbar-nav-item">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Website<b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#" id="al_open_pages_panel">Pages</a></li>
-                                <li><a href="#" id="al_open_languages_panel">Languages</a></li>
-                                <li><a href="#" id="al_open_themes_panel">Themes</a></li>
-                                <li><a href="#" id="al_open_media_library">Media Library</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown toolbar-nav-item">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Deploy<b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#" class="al_deployer" rel="stage">Stage</a></li>
-                                <li><a href="#" class="al_deployer" rel="local">Production</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </td>            
-                {% if is_secure %}
-                <td>
-                    <ul class="nav"> 
-                        <li class="dropdown toolbar-nav-item">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Security<b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#" id="al_open_users_manager">Users</a></li>
-                                <li><a href="#" id="al_logout">Logout</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                        {#
-                    <ul class="toolbar-nav" >
-                        <li><a href="#" id="al_open_users_manager">Users</a></li>
-                        <li><a href="#" id="al_logout">Logout</a></li>
-                    </ul>}
-                </td>  
-                {% endif %} 
-            </tr>
-        </table>
-    </div>
-    <div id="al_navigator" class="al_float_right al_boxes_margins">
-        <table>
-            <tr>
-                <td>Navigate</td>
-                <td>
-                    <span id="al_languages_navigator_box">
-                    {% include 'AlphaLemonCmsBundle:Cms:menu_combo.html.twig' with {'id': 'al_languages_navigator', 'items' : languages, 'selected' : language}  %}
-                    </span>
-                </td>
-                <td>
-                    <span id="al_pages_navigator_box">
-                    {% include 'AlphaLemonCmsBundle:Cms:menu_combo.html.twig' with {'id': 'al_pages_navigator', 'items' : pages, 'selected' : page}  %}
-                    </span>
-                </td>
-                <td>Languages</td>
-                <td>{% include 'AlphaLemonCmsBundle:Cms:menu_combo.html.twig' with {'id': 'al_available_languages', 'items' : available_languages}  %}</td>
-            </tr>
-        </table>
-    </div>
-    <div style="clear:both;"></div>
-</div>#}
 
 <div id="al_panel"></div>
 
 <div id="al_context_menu">
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-        <li><a tabindex="-1" href="#">Action</a></li>
-        <li><a tabindex="-1" href="#">Another action</a></li>
-        <li><a tabindex="-1" href="#">Something else here</a></li>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">   
+        <li class="dropdown-submenu">
+            <a tabindex="-1" href="#">Add</a>
+            <ul class="dropdown-menu">
+                {% for item, description in available_blocks %}
+                <li><a tabindex="-1" href="#" rel="{{ item }}" class="al_context_menu_item">{{ description }}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
         <li class="divider"></li>
-        <li><a tabindex="-1" href="#">Separated link</a></li>
+        <li><a id="al_context_menu_edit" tabindex="-1" href="#">Edit</a></li>
+        <li><a id="al_context_menu_delete" tabindex="-1" href="#">Delete</a></li>
     </ul>
 </div>
 

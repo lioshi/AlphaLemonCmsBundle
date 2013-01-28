@@ -21,23 +21,27 @@
 
         this.each(function()
         {
-            $(this).unbind().ShowBlockEditor();
-            $(this).HideContentsForEditMode();
+            $(this)
+                .unbind()
+                .ShowBlockEditor()
+                .HideContentsForEditMode()
+                .addClass('al_edit_on')
+                .attr('data-toggle', 'context')
+                .mouseover(function(event)
+                {
+                    if(!$(this).hasClass('al_highlight_content')) $(this).addClass('al_highlight_content');
+                    $(this).css('cursor', 'pointer');
 
-            $(this).addClass('al_edit_on');
-            $(this).mouseover(function(event)
-            {
-                if(!$(this).hasClass('al_highlight_content')) $(this).addClass('al_highlight_content');
-                $(this).css('cursor', 'pointer');
+                    return false;
+                })
+                .mouseout(function(event)
+                {
+                    $(this).removeClass('al_highlight_content');
+                    $(this).css('cursor', 'auto');
 
-                return false;
-            }).mouseout(function(event)
-            {
-                $(this).removeClass('al_highlight_content');
-                $(this).css('cursor', 'auto');
-
-                return false;
-            });
+                    return false;
+                })
+            ;
 
             $(this).find("a").unbind().click(function(event) {
                 event.preventDefault();
@@ -62,7 +66,7 @@
 
             this.each(function()
             {
-                $(this).unbind().removeClass('al_edit_on');
+                $(this).unbind().removeClass('al_edit_on').removeAttr('data-toggle');
             });
 
             cmsStartInternalJavascripts();
@@ -82,6 +86,8 @@
                 $(this).html('<p>A ' + data.type  + ' block is not renderable in edit mode</p>').addClass('is_hidden_in_edit_mode');
             }
         });
+
+        return this;
     };
 
     $.fn.ShowHiddenContentsFromEditMode = function()
@@ -257,7 +263,13 @@ $(document).ready(function(){
                 },
                 success: function(html)
                 {
-                    $('body').showAlert(html);
+                    InitDialog('al_editor_dialog_tmp');
+                    $('#al_editor_dialog_tmp').html(html);
+                    $('#al_editor_dialog_tmp')
+                        .dialog('open')
+                        .delay(100)
+                        .fadeOut(function(){ $(this).dialog("close") })
+                    ;
                 },
                 error: function(err)
                 {

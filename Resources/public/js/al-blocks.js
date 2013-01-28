@@ -43,6 +43,8 @@ var isEditorOpened = false;
                 $(this).OpenEditor();
             });
         });
+
+        return this;
     };
 
     $.fn.OpenEditor =function()
@@ -313,7 +315,7 @@ var isEditorOpened = false;
         });
     };
 
-    $.fn.DeleteContent =function()
+    $.fn.DeleteBlock =function()
     {
         var editableData = $(this).metadata();
         var idBlock = editableData.id;
